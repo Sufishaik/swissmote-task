@@ -59,14 +59,11 @@ const ConnectWallet = () => {
   }, []);
 
   useEffect(() => {
-    // Reset all relevant state when blockchain changes
     setAccount(null);
     setBalance(null);
     setIsRealAccount(false);
     setFlipResult(null);
     setError(null);
-
-    // Optionally, perform blockchain-specific initialization here
   }, [blockchain]);
 
   const connectRealAccount = async () => {
@@ -81,7 +78,7 @@ const ConnectWallet = () => {
             method: "eth_requestAccounts",
           });
           setAccount(accounts[0]);
-          fetchBalance(accounts[0]); // Fetch real balance
+          fetchBalance(accounts[0]);
           setIsRealAccount(true);
           toast.success("Successfully connected to your real wallet!");
         } else {
@@ -91,7 +88,7 @@ const ConnectWallet = () => {
         if (window.solana) {
           const resp = await window.solana.connect();
           setAccount(resp.publicKey.toString());
-          fetchBalance(resp.publicKey.toString()); // Fetch real balance
+          fetchBalance(resp.publicKey.toString());
           setIsRealAccount(true);
           toast.success("Successfully connected to your real Solana wallet!");
         } else {
@@ -132,13 +129,11 @@ const ConnectWallet = () => {
           );
           const publicKey = new PublicKey(account);
 
-          // Fetch balance in lamports
           const balance = await connection.getBalance(publicKey);
 
-          // Convert balance to SOL
-          const balanceInSOL = balance / 1000000000; // Solana uses lamports, 1 SOL = 1 billion lamports
+          const balanceInSOL = balance / 1000000000;
 
-          setBalance(balanceInSOL.toFixed(2)); // Update balance state
+          setBalance(balanceInSOL.toFixed(2));
         } else {
           setError("Solana wallet not detected.");
         }
@@ -175,7 +170,6 @@ const ConnectWallet = () => {
     setLoading(true);
     setFlipResult(null);
 
-    // Simulate a coin flip
     setTimeout(() => {
       const result = Math.random() < 0.5 ? "Heads" : "Tails";
       setFlipResult(result);
@@ -183,7 +177,7 @@ const ConnectWallet = () => {
 
       if (result === selectedSide) {
         if (account === "dummy-account") {
-          setDummyBalance(dummyBalance * 2); // Double the dummy balance if won
+          setDummyBalance(dummyBalance * 2);
         } else {
           const newBalance = (parseFloat(balance || "0") * 2).toFixed(4);
           setBalance(newBalance);
@@ -191,7 +185,7 @@ const ConnectWallet = () => {
         toast.success(`Congratulations! You won the coin flip!`);
       } else {
         if (account === "dummy-account") {
-          setDummyBalance(dummyBalance / 2); // Halve the dummy balance if lost
+          setDummyBalance(dummyBalance / 2);
         } else {
           const newBalance = (parseFloat(balance || "0") / 2).toFixed(4);
           setBalance(newBalance);
